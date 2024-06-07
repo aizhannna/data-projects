@@ -53,7 +53,7 @@ To get a local copy of the project up and running, follow these simple steps.
       - Password: your-db-password
    ```
    5. **Click `Test Connection` to ensure that the connection details are correct. Click `OK` to save the connection.**
-   
+
    ![alt text](./img/image.png)
 
    #### In DBeaver create schemas STG and DWH for the tables by running below SQL Scripts:
@@ -91,3 +91,4 @@ To get a local copy of the project up and running, follow these simple steps.
    select count(*)
    from dwh.dim_shipping;
    ```
+   Wait for the next tasks!
