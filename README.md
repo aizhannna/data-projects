@@ -67,7 +67,7 @@ To get a local copy of the project up and running, follow these simple steps.
       - Configure the database connection:
       - Go to the Database Connections and set up a new connection using the details of your DB.
       - Run the job to execute the ETL process.
-   
+
    ![alt text](./img/image-2.png)
    ![alt text](./img/image-3.png)
 
