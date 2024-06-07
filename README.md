@@ -53,7 +53,8 @@ To get a local copy of the project up and running, follow these simple steps.
       - Password: your-db-password
    ```
    5. **Click `Test Connection` to ensure that the connection details are correct. Click `OK` to save the connection.**
-   ![alt text](image.png)
+
+   ![alt text](./img/image.png)
 
    #### In DBeaver create schemas STG and DWH for the tables by running below SQL Scripts:
    - Scriptis to create tables in STG schema to load the raw [data](./data) : [create_tables.sql](./SQL/create_tables.sql) 
