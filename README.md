@@ -69,24 +69,3 @@ To get a local copy of the project up and running, follow these simple steps.
    
    ![alt text](image-2.png)
    ![alt text](image-3.png)
-
-   - Open DBeaver and run the following queries to check the loaded data:
-   ```bash
-   select count(*)
-   from stg.orders o ;
-
-   select count(*)
-   from stg.people p  ;
-   
-   select count(*)
-   from stg.returns r ;
-
-   select count(*)
-   from dwh.dim_customer dc  ;
-
-   select count(*)
-   from dwh.dim_geo dg; 
-
-   select count(*)
-   from dwh.dim_shipping;
-   ```
