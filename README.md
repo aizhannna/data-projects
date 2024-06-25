@@ -17,17 +17,21 @@ To get a local copy of the project up and running, follow these simple steps.
 - VSCode
 - git
 - Pentaho Data Integration (PDI) or any other ETL tool
-
+- python
 ### Project tasks
-1. Clone the repo and access it using VS Code
-2. Load data to PostgreSQL by building ETL using Pentaho DI:
+1. Week 1: Clone the repo and access it using VS Code
+2. Week 2: Load data to PostgreSQL by building ETL using Pentaho DI:
    - Create DB/DWH to store the data
    - Load raw data to STG (staging)
    - Load dimensions to DWH (Data warehouse)
-3. Next tasks are coming
+3. Week 3: Build models using dbt Core
+   - setup ```dbt Core``` and create new dbt project
+   - define and specify source tables in ```sources.yml```
+   - define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases. 
+   - build staging model using [Medallion Architecture](https://i-spark.nl/en/blog/dbt-naming-conventions-and-medallion-architecture/).
 
 
-### Task 1: Clone the repo and access it using VS Code
+### Week 1: Clone the repo and access it using VS Code
    **Open VSCode and launch the terminal:**
    - You can open the terminal by pressing ``Ctrl+` `` (backtick) or navigating to `View > Terminal`.
    **Clone the repository:**
@@ -35,7 +39,7 @@ To get a local copy of the project up and running, follow these simple steps.
    git clone https://github.com/aizhannna/data-projects.git
    ```
 
-### Task 2: Load data to PostgreSQL**
+### Week 2: Load data to PostgreSQL**
   **Connect to PostgreSQL using DBeaver**
    #### Download and install DBeaver:
    1. Go to the [DBeaver download page](https://dbeaver.io/download/) and download the appropriate version for your operating system.
@@ -75,20 +79,109 @@ To get a local copy of the project up and running, follow these simple steps.
    ```bash
    select count(*)
    from stg.orders o ;
-
    select count(*)
-   from stg.people p  ;
-   
+   from stg.people p  ; 
    select count(*)
    from stg.returns r ;
-
    select count(*)
    from dwh.dim_customer dc  ;
-
    select count(*)
    from dwh.dim_geo dg; 
-
    select count(*)
    from dwh.dim_shipping;
    ```
+### Week 3: Build models using dbt Core
+   **Setup `dbt Core` and create new dbt project (see [this link](https://docs.getdbt.com/docs/core/pip-install) for more)** 
+   1. Create a new virtual environment in a specific folder to namespace pip modules:
+      ```bash 
+      python3 -m venv venvs/dbt_env       # create the environment 
+      ```
+   2. Activate the same virtual environment
+      ```bash 
+      source venvs/dbt_env/bin/activate     # activate the environment for Mac and Linux OR
+      venvs/dbt_env\Scripts\activate            # activate the environment for Windows
+      ```
+   3. Use the following command to install `dbt core` and `dbt database adapter` to connect to Postgres:
+      ```bash 
+      python3 -m pip install dbt-postgres
+      ```
+      You can check the dbt version and adapter that has been installed:
+      ![alt text](./img/dbtVerscheck.png)
+
+      **See this [link](https://docs.getdbt.com/docs/core/pip-install) for more information on how to install dbt Core.**
+   4. Next step is to create project by running `dbt init project_name` then you should setup your        profile by answering to the questions as in the pictures below:
+      ![create dbt project](./img/create_dbt_project.png)
+      ![profile setup](./img/profile_setup.png)
+   5. Then run dbt `dbt debug` command to check the connection:
+      ![dbtdebug](./img/dbtdebug.png)
+
+   **Define and specify source tables in `sources.yml`**
+   1. Create `sources.yml` under  your project/models folder and specify source tables metadata as in    example below (see more [here](https://docs.getdbt.com/reference/source-configs)):
+   ```bash
+      sources:
+      - name: superstore
+         description: Data from Superstore dataset
+         database: SURFALYTICS_DW_AIZHAN
+         schema: raw
+         tables: 
+            - name: orders
+            description: Raw orders data
+            - name: people
+            description: Raw data for regional managers
+            - name: returns
+            description: Raw data for returned orders
+   ```
+   **Build staging model using [Medallion Architecture](https://i-spark.nl/en/blog/dbt-naming-conventions-and-medallion-architecture/)** - in context of `dbt` it is just folders:
+   - dbt_superstore/models/
+      - bronze 
+      - silver
+      - gold
+   
+   1. Create the staging or bronze model to pull the raw data from source tables and make `config` in the top of model to specify setttings such as `aliasl`, `strategy`, etc. See [dbt documentation](https://docs.getdbt.com/reference/model-properties) for details. Go to see [dbt_superstore/models](dbt_superstore/models/bronze)
+
+      ![model structure](./img/modelstructure.png)
+
+   **Define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases.** 
+   1. Run `dbt debug` to find location of `profiles.yml` and then click to the path to open the file: 
+      ![profile location](./img/profileslocation.png)
+   
+   2. Define `dev` and `prod` connection details to deploy the models to your datawarehouse for both  `dev`  or `prod` environments. Make sure to avoid `tab` indentations, you should use `spaces` for indentation in `profiles.yml`.
+      ```bash
+      dbt_superstore:
+      target: dev #default target environment if you don't specify otherwise when running the models
+      outputs:
+         dev:
+            dbname: SURFALYTICS_DW_AIZHAN
+            host: surfalytics-prod.postgres.database.azure.com 
+            pass: ***** #put you password
+            port: 5432
+            schema: stg #schema name
+            threads: 1
+            type: postgres
+            user: surfalyticsadmin
+         prod:
+            dbname: SURFALYTICS_DW_AIZHAN
+            host: surfalytics-prod.postgres.database.azure.com 
+            pass: ***** #put you password
+            port: 5432
+            schema: stg #schema name
+            threads: 1
+            type: postgres
+            user: surfalyticsadmin
+      ```
+   3. Run and deploy the models to the datawarehouse in `dev` environment: 
+      ```bash
+      dbt debug # check the connection
+      dbt compile # to compile the models
+      dbt run #to run the models
+      ```
+      ![dbt compile](./img/dbt_compile.png)
+      ![dbt run](./img/dbtrun.png)
+   
+   4. You should be able to see the views in your datawarehouse in stg schema (`dev` environment):
+      ![stg views](./img/stg_views.png)
+  
+  
+  
+  
    Wait for the next tasks!
