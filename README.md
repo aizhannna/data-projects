@@ -27,7 +27,7 @@ To get a local copy of the project up and running, follow these simple steps.
 3. Week 3: Build models using dbt Core
    - setup ```dbt Core``` and create new dbt project
    - define and specify source tables in ```sources.yml```
-   - define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases. 
+   - define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases.
    - build staging model using [Medallion Architecture](https://i-spark.nl/en/blog/dbt-naming-conventions-and-medallion-architecture/).
 
 
@@ -61,10 +61,10 @@ To get a local copy of the project up and running, follow these simple steps.
    ![alt text](./img/image.png)
 
    #### In DBeaver create schemas STG and DWH for the tables by running below SQL Scripts:
-   - Scriptis to create tables in STG schema to load the raw [data](./data) : [create_tables.sql](./SQL/create_tables.sql) 
-   - Scriptis to create dimension tables in DWH schema to load the dictionary data: [create_dim_tables.sql](./SQL/create_dim_tables.sql) 
+   - Scriptis to create tables in STG schema to load the raw [data](./data) : [create_tables.sql](./SQL/create_tables.sql)
+   - Scriptis to create dimension tables in DWH schema to load the dictionary data: [create_dim_tables.sql](./SQL/create_dim_tables.sql)
    #### ETL Process
-   - The ETL (Extract, Transform, Load) process is handled by Pentaho Data Integration (PDI). The process involves extracting data from source (in our case the data is in Excel), transforming it into the desired format, and loading it into the PostgreSQL database on Azure. Jobs and Transformations are located in [ETL](./ETL) 
+   - The ETL (Extract, Transform, Load) process is handled by Pentaho Data Integration (PDI). The process involves extracting data from source (in our case the data is in Excel), transforming it into the desired format, and loading it into the PostgreSQL database on Azure. Jobs and Transformations are located in [ETL](./ETL)
    - Running the ETL Process
       - Open Pentaho Data Integration (PDI).
       - Load the job file [ETL](./ETL/superstore_workflow_job.kjb) .
@@ -80,29 +80,29 @@ To get a local copy of the project up and running, follow these simple steps.
    select count(*)
    from stg.orders o ;
    select count(*)
-   from stg.people p  ; 
+   from stg.people p  ;
    select count(*)
    from stg.returns r ;
    select count(*)
    from dwh.dim_customer dc  ;
    select count(*)
-   from dwh.dim_geo dg; 
+   from dwh.dim_geo dg;
    select count(*)
    from dwh.dim_shipping;
    ```
 ### Week 3: Build models using dbt Core
-   **Setup `dbt Core` and create new dbt project (see [this link](https://docs.getdbt.com/docs/core/pip-install) for more)** 
+   **Setup `dbt Core` and create new dbt project (see [this link](https://docs.getdbt.com/docs/core/pip-install) for more)**
    1. Create a new virtual environment in a specific folder to namespace pip modules:
-      ```bash 
-      python3 -m venv venvs/dbt_env       # create the environment 
+      ```bash
+      python3 -m venv venvs/dbt_env       # create the environment
       ```
    2. Activate the same virtual environment
-      ```bash 
+      ```bash
       source venvs/dbt_env/bin/activate     # activate the environment for Mac and Linux OR
       venvs/dbt_env\Scripts\activate            # activate the environment for Windows
       ```
    3. Use the following command to install `dbt core` and `dbt database adapter` to connect to Postgres:
-      ```bash 
+      ```bash
       python3 -m pip install dbt-postgres
       ```
       You can check the dbt version and adapter that has been installed:
@@ -123,7 +123,7 @@ To get a local copy of the project up and running, follow these simple steps.
          description: Data from Superstore dataset
          database: SURFALYTICS_DW_AIZHAN
          schema: raw
-         tables: 
+         tables:
             - name: orders
             description: Raw orders data
             - name: people
@@ -133,18 +133,18 @@ To get a local copy of the project up and running, follow these simple steps.
    ```
    **Build staging model using [Medallion Architecture](https://i-spark.nl/en/blog/dbt-naming-conventions-and-medallion-architecture/)** - in context of `dbt` it is just folders:
    - dbt_superstore/models/
-      - bronze 
+      - bronze
       - silver
       - gold
-   
+
    1. Create the staging or bronze model to pull the raw data from source tables and make `config` in the top of model to specify setttings such as `aliasl`, `strategy`, etc. See [dbt documentation](https://docs.getdbt.com/reference/model-properties) for details. Go to see [dbt_superstore/models](dbt_superstore/models/bronze)
 
       ![model structure](./img/modelstructure.png)
 
-   **Define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases.** 
-   1. Run `dbt debug` to find location of `profiles.yml` and then click to the path to open the file: 
+   **Define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases.**
+   1. Run `dbt debug` to find location of `profiles.yml` and then click to the path to open the file:
       ![profile location](./img/profileslocation.png)
-   
+
    2. Define `dev` and `prod` connection details to deploy the models to your datawarehouse for both  `dev`  or `prod` environments. Make sure to avoid `tab` indentations, you should use `spaces` for indentation in `profiles.yml`.
       ```bash
       dbt_superstore:
@@ -152,7 +152,7 @@ To get a local copy of the project up and running, follow these simple steps.
       outputs:
          dev:
             dbname: SURFALYTICS_DW_AIZHAN
-            host: surfalytics-prod.postgres.database.azure.com 
+            host: surfalytics-prod.postgres.database.azure.com
             pass: ***** #put you password
             port: 5432
             schema: stg #schema name
@@ -161,7 +161,7 @@ To get a local copy of the project up and running, follow these simple steps.
             user: surfalyticsadmin
          prod:
             dbname: SURFALYTICS_DW_AIZHAN
-            host: surfalytics-prod.postgres.database.azure.com 
+            host: surfalytics-prod.postgres.database.azure.com
             pass: ***** #put you password
             port: 5432
             schema: stg #schema name
@@ -169,7 +169,7 @@ To get a local copy of the project up and running, follow these simple steps.
             type: postgres
             user: surfalyticsadmin
       ```
-   3. Run and deploy the models to the datawarehouse in `dev` environment: 
+   3. Run and deploy the models to the datawarehouse in `dev` environment:
       ```bash
       dbt debug # check the connection
       dbt compile # to compile the models
@@ -177,11 +177,13 @@ To get a local copy of the project up and running, follow these simple steps.
       ```
       ![dbt compile](./img/dbt_compile.png)
       ![dbt run](./img/dbtrun.png)
-   
+
    4. You should be able to see the views in your datawarehouse in stg schema (`dev` environment):
       ![stg views](./img/stg_views.png)
-  
-  
-  
-  
+
+### Week 4: Add pre-commit and compare dbt strategy vs dbt config
+
+
+
+
    Wait for the next tasks!
