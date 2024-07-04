@@ -38,6 +38,3 @@ models:
           - not_null
       - name: etl_timestamp
         description: "Datetime when the data was loaded"
-        
-
-

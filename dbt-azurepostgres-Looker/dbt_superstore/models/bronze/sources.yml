@@ -3,7 +3,7 @@ sources:
     description: Data from Superstore dataset
     database: SURFALYTICS_DW_AIZHAN
     schema: raw
-    tables: 
+    tables:
       - name: orders
         description: Raw orders data
       - name: people
