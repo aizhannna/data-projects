@@ -1,4 +1,4 @@
-# Dimensional Modeling Project with Remote PostgreSQL DB on Azure
+# Dimensional Modeling Project with Azure Postgre, dbt Core and Looker
 
 ## Overview
 This project demonstrates the implementation of a dimensional model on a remote PostgreSQL database hosted on Azure, using Pentaho Data Integration (PDI) for ETL processes. Dimensional modeling is a data modeling technique used to structure data warehouses for efficient querying and reporting. The project includes the design and deployment of star schema to support business intelligence and data analytics.
@@ -19,17 +19,23 @@ To get a local copy of the project up and running, follow these simple steps.
 - Pentaho Data Integration (PDI) or any other ETL tool
 - python
 ### Project tasks
-1. Week 1: Clone the repo and access it using VS Code
-2. Week 2: Load data to PostgreSQL by building ETL using Pentaho DI:
+1. [Week 1](#week-1-clone-the-repo-and-access-it-using-vs-code): Clone the repo and access it using VS Code
+2. [Week 2](#week-2-load-data-to-postgresql): Load data to PostgreSQL by building ETL using Pentaho DI:
    - Create DB/DWH to store the data
    - Load raw data to STG (staging)
    - Load dimensions to DWH (Data warehouse)
-3. Week 3: Build models using dbt Core
-   - setup ```dbt Core``` and create new dbt project
-   - define and specify source tables in ```sources.yml```
-   - define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases.
-   - build staging model using [Medallion Architecture](https://i-spark.nl/en/blog/dbt-naming-conventions-and-medallion-architecture/).
-
+3. [Week 3](#week-3-build-models-using-dbt-core): Build models using dbt Core
+   - Setup ```dbt Core``` and create new dbt project
+   - Define and specify source tables in ```sources.yml```
+   - Define `dev` and `prod` profiles in ```profiles.yml``` to deploy respectively to dev/prod schema or databases.
+   - Build staging model using [Medallion Architecture](https://i-spark.nl/en/blog/dbt-naming-conventions-and-medallion-architecture/).
+4. [Week 4](#week-4-add-pre-commit-and-compare-dbt-strategy-vs-dbt-config): Add pre-commit to the repo, compare dbt strategy and dbt config
+   - Add pre-commit to your repo, to check YAML files, trailing whitespace and SQL.
+   - Compare dbt strategy and dbt config https://docs.getdbt.com/docs/build/incremental-strategy
+      - creating view
+      - full table reload
+      - incremental
+   - Add github actions to be able to run pre-commit in CI i.e. when you create a PR, it will test the files.
 
 ### Week 1: Clone the repo and access it using VS Code
    **Open VSCode and launch the terminal:**
@@ -152,7 +158,7 @@ To get a local copy of the project up and running, follow these simple steps.
       outputs:
          dev:
             dbname: SURFALYTICS_DW_AIZHAN
-            host: surfalytics-prod.postgres.database.azure.com
+            host: hostname
             pass: ***** #put you password
             port: 5432
             schema: stg #schema name
@@ -161,7 +167,7 @@ To get a local copy of the project up and running, follow these simple steps.
             user: surfalyticsadmin
          prod:
             dbname: SURFALYTICS_DW_AIZHAN
-            host: surfalytics-prod.postgres.database.azure.com
+            host: hostname
             pass: ***** #put you password
             port: 5432
             schema: stg #schema name
@@ -182,7 +188,14 @@ To get a local copy of the project up and running, follow these simple steps.
       ![stg views](./img/stg_views.png)
 
 ### Week 4: Add pre-commit and compare dbt strategy vs dbt config
-
+   This week we're still working in bronze(stg) model.
+   1. Add pre-commit to your repo, to check YAML files, trailing whitespace and SQL.
+   2. Compare dbt strategy and dbt config https://docs.getdbt.com/docs/build/incremental-strategy
+   - creating view
+   - full table reload
+   - incremental
+   we are using `dbt-postgres` and it supports - append, merge, delete+insert: copy the same model and try these 3 options and document the SQL difference about these 3 approaches
+   3. Add github actions to be able to run pre-commit in CI i.e. when you create a PR, it will test the files.
 
 
 
