@@ -1,0 +1,14 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: https://github.com/sqlfluff/sqlfluff
+    rev: 1.0.0  # Use the latest version from the repo
+    hooks:
+      - id: sqlfluff-lint
+        args: [--dialect, postgres]  # Specify your SQL dialect here
+      - id: sqlfluff-fix
+        args: [--dialect, postgres]  # Specify your SQL dialect here

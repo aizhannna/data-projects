@@ -1,12 +1,11 @@
 {{ config(
   materialized='view',
-  alias='reg_managers',
-  strategy ='view'
+  alias='reg_managers'
 ) }}
 
 SELECT
-row_number() over () as dwh_id,
-regional_mngr as manager_name,
-region ,
-current_timestamp as etl_timestamp
-FROM {{source('superstore','people')}}
+    regional_mngr AS manager_name,
+    region,
+    row_number() OVER () AS dwh_id,
+    current_timestamp AS etl_timestamp
+FROM {{ source('superstore', 'people') }}
